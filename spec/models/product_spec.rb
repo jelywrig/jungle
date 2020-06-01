@@ -4,10 +4,11 @@ RSpec.describe Product, type: :model do
   describe 'Validations' do
     # validation tests/examples here
     it 'saves succesfully when all required fields present' do
-
+      category = Category.new(name: "test")
+      category.save;
       product=Product.new(name: "Testing",
       description: "Test text blah blah blah",
-      category_id: 1,
+      category_id: category.id,
       quantity: 5,
       price: 500)
       
