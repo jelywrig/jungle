@@ -45,6 +45,38 @@ RSpec.describe User, type: :model do
         expect(user2.errors[:email]).to include ("has already been taken")
       end
     end
+  end
+  describe '.authenticate_with_credentials' do
+    it "should return user if correct credentials provided" do
+      user = User.new(first_name: "Test", last_name: "User", email: "email@example.com", password:"password", password_confirmation: "password")
+      user.save
+      returnedVal = User.authenticate_with_credentials("email@example.com", "password");
+      expect(returnedVal.eql?(user))
+    end
+    it "should return nill if incorrect password provided" do
+      user = User.new(first_name: "Test", last_name: "User", email: "email@example.com", password:"password", password_confirmation: "password")
+      user.save
+      returnedVal = User.authenticate_with_credentials("email@example.com", "wrongpassword");
+      expect(returnedVal).to be nil
+    end
+    it "should return nill if non existant email provided" do
+      user = User.new(first_name: "Test", last_name: "User", email: "email@example.com", password:"password", password_confirmation: "password")
+      user.save
+      returnedVal = User.authenticate_with_credentials("nope@example.com", "password");
+      expect(returnedVal).to be nil
+    end
+    it "should return user if leading/trailing spaces on email" do
+      user = User.new(first_name: "Test", last_name: "User", email: "email@example.com", password:"password", password_confirmation: "password")
+      user.save
+      returnedVal = User.authenticate_with_credentials(" email@example.com ", "password");
+      expect(returnedVal.eql?(user))
+    end
 
+    it "should return user if case mismatch in email (eXample@domain.COM, EXAMple@DOMAIN.CoM)" do
+      user = User.new(first_name: "Test", last_name: "User", email: "eXample@domain.COM", password:"password", password_confirmation: "password")
+      user.save
+      returnedVal = User.authenticate_with_credentials("EXAMple@DOMAIN.CoM", "password");
+      expect(returnedVal.eql?(user))
+    end
   end
 end
