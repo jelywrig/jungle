@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
       user = User.new(first_name: "Test", last_name: "User", email: "email@example.com", password:"password", password_confirmation: "password")
       user.save
       returnedVal = User.authenticate_with_credentials("email@example.com", "password");
-      expect(returnedVal.eql?(user))
+      expect(returnedVal).to eql(user)
     end
     it "should return nill if incorrect password provided" do
       user = User.new(first_name: "Test", last_name: "User", email: "email@example.com", password:"password", password_confirmation: "password")
@@ -69,14 +69,14 @@ RSpec.describe User, type: :model do
       user = User.new(first_name: "Test", last_name: "User", email: "email@example.com", password:"password", password_confirmation: "password")
       user.save
       returnedVal = User.authenticate_with_credentials(" email@example.com ", "password");
-      expect(returnedVal.eql?(user))
+      expect(returnedVal).to eql(user)
     end
 
     it "should return user if case mismatch in email (eXample@domain.COM, EXAMple@DOMAIN.CoM)" do
       user = User.new(first_name: "Test", last_name: "User", email: "eXample@domain.COM", password:"password", password_confirmation: "password")
       user.save
-      returnedVal = User.authenticate_with_credentials("EXAMple@DOMAIN.CoM", "password");
-      expect(returnedVal.eql?(user))
+      returnedVal = User.authenticate_with_credentials("EXAMple@DOMAIN.CoM", "password")
+      expect(returnedVal).to eql(user)
     end
   end
 end
